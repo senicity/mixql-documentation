@@ -39,6 +39,9 @@ docker pull senicity/mixql:latest
 
 ### Run Container
 ```bash
+# Run Latest
+docker run -p 7272:7272 senicity/mixql:latest
+
 # Run Alpine version
 docker run -p 7272:7272 senicity/mixql:alpine
 
