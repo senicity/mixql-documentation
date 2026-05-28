@@ -17,105 +17,54 @@
 // --
 ```
 
-## MixQL Server
+# MixQL Documentation
 
-A TCP-based query language server for hashing, salting, and one-way encryption operations. Built with C++17, OpenSSL, and LevelDB.
+Official documentation for MixQL - a TCP-based query language server for hashing, salting, storage and one-way encryption operations. Built with C++17, OpenSSL, and LevelDB.
 
----
+## Docker Hub Images
 
-## Prerequisites
+MixQL images are available on Docker Hub:
 
-- CMake 3.10+
-- C++17 compiler (g++ or clang++)
-- OpenSSL development libraries
-- LevelDB development libraries
-- Compression libraries: zlib, bzip2, snappy, lz4, zstd
-- gflags
-
-### Install on Ubuntu/Debian
-
+### Pull Images
 ```bash
-sudo apt-get install build-essential cmake libssl-dev libleveldb-dev \
-  libgflags-dev libsnappy-dev libbz2-dev liblz4-dev libzstd-dev
+# Alpine variant (recommended, smaller)
+docker pull senicity/mixql:alpine
+
+# Ubuntu variant
+docker pull senicity/mixql:ubuntu
+
+# Latest stable (aliases to alpine)
+docker pull senicity/mixql:latest
 ```
 
-### Install on Alpine
-
+### Run Container
 ```bash
-apk add build-base cmake openssl3-dev leveldb-dev gflags-dev \
-  snappy-dev bzip2-dev lz4-dev zstd-dev
+# Run Alpine version
+docker run -p 7272:7272 senicity/mixql:alpine
+
+# Run Ubuntu version  
+docker run -p 7272:7272 senicity/mixql:ubuntu
 ```
 
-### Install on macOS
-
+### Test Connection
 ```bash
-brew install cmake openssl leveldb gflags snappy lz4 zstd
+echo -e "CREATE UUID\n" | nc localhost 7272
 ```
 
----
+## Image Variants
 
-## Build
-
-```bash
-mkdir build && cd build
-cmake ..
-make
-```
-
-The binary `mixql` is produced in the build directory.
-
----
+| Tag | Description | Size |
+|-----|-------------|------|
+| `alpine` | Alpine Linux base, minimal footprint | ~25MB |
+| `ubuntu` | Ubuntu 22.04 base, full libraries | ~90MB |
+| `latest` | Latest stable (points to alpine) | ~25MB |
 
 ## Configuration
 
-Create a `config.ini` file in the working directory (see `config/config.example.ini`):
-
-```ini
-[server]
-port=7272
-dbname=mixql
-```
-
-Alternatively, use environment variables (these override file values):
-
+Set environment variables:
 ```bash
 export SERVER_PORT=7272
 export SERVER_DBNAME=mixql
-```
-
-| Parameter | Env Var | Default | Description |
-|---|---|---|---|
-| `port` | `SERVER_PORT` | `7272` | TCP listen port |
-| `dbname` | `SERVER_DBNAME` | `datastore` | LevelDB database name |
-
----
-
-## Running
-
-```bash
-./mixql
-```
-
-The server prints the NOTICE file and begins listening on the configured port.
-
-Send `SIGINT` (Ctrl+C) or `SIGTERM` to gracefully shut down the server.
-
----
-
-## Docker
-
-### Alpine (smaller image)
-
-```bash
-docker build -f Dockerfile.alpine -t mixql:alpine .
-docker run -p 7272:7272 mixql:alpine
-```
-
-### Ubuntu
-
-```bash
-docker build -f Dockerfile.ubuntu -t mixql:ubuntu .
-docker run -p 7272:7272 mixql:ubuntu
 ```
 
 ---
@@ -249,12 +198,10 @@ echo -e "STORE DELETE hash_password\n" | nc localhost 7272
 
 ---
 
-## Architecture
+## Links
 
-See [ARCHITECTURE.md](ARCHITECTURE.md) for system design details and [AGENTS.md](AGENTS.md) for component documentation.
-
----
+- [Docker Hub](https://hub.docker.com/r/senicity/mixql)
+- [Senicity](https://senicity.com)
 
 ## License
-
 Copyright ©2026, Senicity Ltd. See `NOTICE` for details.
